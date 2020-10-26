@@ -9,8 +9,7 @@ import android.widget.TextView;
 
 import static com.example.calculatorapp.ConvertStringToMathExpression.convert;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button b_0, b_1, b_2, b_3, b_4, b_5, b_6, b_7, b_8, b_9;
     Button b_ce, b_c, b_bs;
     Button b_add, b_subtract, b_multiply, b_divide, b_equal, b_dot, b_lunisolar;
@@ -24,8 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button[] number_buttons;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -91,33 +89,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         b_9 = (Button) findViewById(R.id.nine);
         b_9.setOnClickListener(this);
 
+        b_c = (Button) findViewById(R.id.c);
+        b_c.setOnClickListener(this);
+
+        b_ce = (Button) findViewById(R.id.ce);
+        b_ce.setOnClickListener(this);
+
+        b_bs = (Button) findViewById(R.id.bs);
+        b_bs.setOnClickListener(this);
         number_buttons = new Button[]{b_0, b_1, b_2, b_3, b_4, b_5, b_6, b_7, b_8, b_9};
     }
 
     @Override
-    public void onClick(View view)
-    {
+    public void onClick(View view) {
 
-        for (Button number_button : number_buttons)
-        {
+        for (Button number_button : number_buttons) {
 //        Reset the Text View if a number button is pressed after pressing equal button
-            if (equal_is_pressed && view.getId() == number_button.getId())
-            {
+            if (equal_is_pressed && view.getId() == number_button.getId()) {
                 screen.setText("");
                 equal_is_pressed = false;
-            } else if (equal_is_pressed && !(view.getId() == number_button.getId()))
-            {
+            } else if (equal_is_pressed && !(view.getId() == number_button.getId())) {
                 equal_is_pressed = false;
-            } else
-            {
+            } else {
                 dot_is_pressed = false;
             }
 //        Allow to press operator buttons after pressing number button
             operator_is_pressed = false;
         }
 
-        switch (view.getId())
-        {
+        switch (view.getId()) {
 //            Number buttons
             case R.id.one:
                 screen.setText(String.format("%s1", screen.getText()));
@@ -152,8 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.dot:
 //                 Make dot button can only be pressed once
-                if (!dot_is_pressed)
-                {
+                if (!dot_is_pressed) {
                     screen.setText(String.format("%s.", screen.getText()));
                     dot_is_pressed = true;
                     break;
@@ -161,40 +160,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //            Operator button handler
             case R.id.add:
-                if (!operator_is_pressed)
-                {
+                if (!operator_is_pressed) {
                     screen.setText(String.format("%s+", screen.getText()));
                     operator_is_pressed = true;
 //                    dot_is_pressed = false;
                 }
                 break;
             case R.id.subtract:
-                if (!operator_is_pressed)
-                {
+                if (!operator_is_pressed) {
                     screen.setText(String.format("%s-", screen.getText()));
                     operator_is_pressed = true;
 //                    dot_is_pressed = false;
                 }
                 break;
             case R.id.divide:
-                if (!operator_is_pressed)
-                {
+                if (!operator_is_pressed) {
                     screen.setText(String.format("%s/", screen.getText()));
                     operator_is_pressed = true;
 //                    dot_is_pressed = false;
                 }
                 break;
             case R.id.multiply:
-                if (!operator_is_pressed)
-                {
+                if (!operator_is_pressed) {
                     screen.setText(String.format("%s*", screen.getText()));
                     operator_is_pressed = true;
 //                    dot_is_pressed = false;
                 }
                 break;
             case R.id.equal:
-                if (screen.getText() != "")
-                {
+                if (screen.getText() != "") {
                     screen.setText(formatted_result(result_from_math_expressions()));
 
                     equal_is_pressed = true;
@@ -202,22 +196,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    dot_is_pressed = false;
                 }
                 break;
+
+            case R.id.c:
+                screen.setText("");
+                break;
+
+            case R.id.bs:
+                String str = screen.getText().toString();
+                if (str.length() > 1) {
+                    str = str.substring(0, str.length() - 1);
+                    screen.setText(str);
+                } else {
+                    screen.setText("");
+                }
+                break;
+
+            case R.id.ce:
+                str = screen.getText().toString();
+                if (str.length() > 1) {
+                    str = str.substring(0, str.lastIndexOf("+") + 1 );
+                    screen.setText(str);
+                } else {
+                }
+                break;
         }
     }
 
-    private String formatted_result(double result)
-    {
-        if (result == (int) result)
-        {
+    private String formatted_result(double result) {
+        if (result == (int) result) {
             return String.valueOf((int) result);
-        } else
-        {
+        } else {
             return String.valueOf(result);
         }
     }
 
-    private double result_from_math_expressions()
-    {
+    private double result_from_math_expressions() {
         return convert((String) screen.getText());
     }
 }
