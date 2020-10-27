@@ -212,14 +212,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.ce:
-                str = screen.getText().toString();
-                if (str.length() > 1) {
-                    str = str.substring(0, str.lastIndexOf("+") + 1 );
-                    screen.setText(str);
-                } else {
+                String math_expression = screen.getText().toString();
+
+                if (math_expression.length() > 1)
+                {
+                    screen.setText(clear_entry(math_expression));
                 }
                 break;
         }
+    }
+
+    private String clear_entry(String expression)
+    {
+        for (int i = expression.length() - 1; i > 0; i--)
+        {
+            if (expression.charAt(i) == '+' || expression.charAt(i) == '-' || expression.charAt(i) == '*' || expression.charAt(i) == '/')
+            {
+                return expression.substring(0, i + 1);
+            }
+        }
+        return "";
     }
 
     private String formatted_result(double result) {
@@ -230,7 +242,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private double result_from_math_expressions() {
+    private double result_from_math_expressions()
+    {
         return convert((String) screen.getText());
     }
 }
